@@ -1,46 +1,12 @@
 Tic-tac-toe Game (Version: 0.4.25022877)
 ------------------------------------------------
-[INFO] - [2026-03-30 09:52:00] GameLogger initialized!
-[INFO] - [2026-03-30 09:52:00] GameInteraction initialized!
-[INFO] - [2026-03-30 09:52:19] GameEngine initialized!
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 3.2e-06s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0015519s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 3.85e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0117062s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.56e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0097186s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.49e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0237271s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.61e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0224037s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 3.4e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0125238s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.13e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.005407s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0098078s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.75e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0056452s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 2.07e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0042046s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 1.84e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0035442s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 1.4e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0023426s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 1.43e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0012505s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 1.02e-05s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0006319s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 8e-06s
-[DEBUG] - [2026-03-30 09:52:19] execution time of [botMove()] = 0.0005134s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 6.7e-06s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 0.0001768s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 5.8e-06s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 5.25e-05s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 4.9e-06s
-[DEBUG] - [2026-03-30 09:52:20] execution time of [botMove()] = 2.82e-05s
-[INFO] - [2026-03-30 09:52:20] GameEngine playing done!
-[INFO] - [2026-03-30 09:52:20] Game ended: winner=-1, turns=36, isBot=false
-[INFO] - [2026-03-30 09:52:20] GameEngine show endgame done!
-[INFO] - [2026-03-30 09:52:20] GameInteraction closed!
-[INFO] - [2026-03-30 09:52:20] GameLogger closing . . .
+[INFO] - [2026-03-30 11:37:28] GameLogger initialized!
+[INFO] - [2026-03-30 11:37:28] redirected cin to: C:\Users\dongh\Documents\UET\PPLLT\BaiTapLon\level-1\testcase\input5.txt
+[INFO] - [2026-03-30 11:37:28] GameInteraction initialized!
+[INFO] - [2026-03-30 11:37:28] GameEngine initialized!
+[INFO] - [2026-03-30 11:37:28] GameEngine playing done!
+[INFO] - [2026-03-30 11:37:28] Game ended: winner=1, turns=11, isBot=false
+[INFO] - [2026-03-30 11:37:28] GameEngine show endgame done!
+[INFO] - [2026-03-30 11:37:28] fallback using 'std::cin' input stream.
+[INFO] - [2026-03-30 11:37:28] GameInteraction closed!
+[INFO] - [2026-03-30 11:37:28] GameLogger closing . . .

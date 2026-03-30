@@ -1955,7 +1955,12 @@ void makeMove(char board[][BOARD_N_MAX], const int row, const int col, const cha
 
 bool isEmptyHead(char board[][BOARD_N_MAX], int size, int x, int y, const char symbol)
 {
-    if (0 <= x && x < size && 0 <= y && y < size && (board[x][y] == '-' || board[x][y] == symbol))
+    if (x < 0 || x >= size || y < 0 || y >= size)
+    {
+        return true;
+    }
+    
+    if (board[x][y] == '-' || board[x][y] == symbol)
     {
         return true;
     }
@@ -2195,7 +2200,6 @@ double cal_score(char board[][BOARD_N_MAX], int size, int x, int y, int dx, int 
 
         if (nx < 0 || nx >= size || ny < 0 || ny >= size)
         {
-            block++;
             break;
         }
 
@@ -2223,7 +2227,6 @@ double cal_score(char board[][BOARD_N_MAX], int size, int x, int y, int dx, int 
 
         if (nx < 0 || nx >= size || ny < 0 || ny >= size)
         {
-            block++;
             break;
         }
 
