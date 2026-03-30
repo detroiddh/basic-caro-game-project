@@ -212,7 +212,7 @@
  * TODO: Modify <STUDENT_ID> with your id.
  * Example: "0.4.2502xxxx"
  */
-const std::string VERSION = "0.4.25022877";
+const std::string VERSION = "0.4.<STUDENT_ID>";
 
 // flag
 /**
@@ -254,7 +254,6 @@ const int RANDOM_SEED = 2013;
 // Increasing this value may affect performance of bot algorithms.
 const int BOARD_N_MAX = 12;
 const int SLEEP_TIME = 1500;
-const int TEST_GAME = 1;
 
 /**
  * Global random number generator.
@@ -281,8 +280,7 @@ std::mt19937 generator(RANDOM_SEED);
  * INVALID_LV
  *   Used internally to represent invalid input.
  */
-enum class BotLevel
-{
+enum class BotLevel {
     EASY,
     MEDIUM,
     HARD,
@@ -304,8 +302,7 @@ enum class BotLevel
  * INVALID_MODE
  *   Used when user input is invalid.
  */
-enum class GameMode
-{
+enum class GameMode {
     PVP,
     PVE,
     EVE,
@@ -324,12 +321,10 @@ enum class GameMode
  *
  * will display the board size selection menu.
  */
-enum class SelectType
-{
+enum class SelectType {
     TITLE_UI,
     SIZE_UI,
     GOAL_UI,
-    END_RULE_UI,
     GAME_MODE_UI,
     BOT_LEVEL_UI,
     PLAYER_UI,
@@ -354,8 +349,7 @@ enum class SelectType
  *
  * This rule can affect advanced bot evaluation.
  */
-enum class EndRule
-{
+enum class EndRule {
     NONE,
     OPEN_ONE,
     OPEN_TWO
@@ -395,8 +389,7 @@ typedef std::pair<int, int> pII;
  * log_file
  *   path of the log file.
  */
-struct RunConfig
-{
+struct RunConfig {
     bool interactive = true;
     bool judge_mode = false;
     std::string input_file;
@@ -423,13 +416,11 @@ struct RunConfig
  * levels
  *   bot difficulty levels for players
  */
-struct GameSetup
-{
+struct GameSetup {
     char board[BOARD_N_MAX][BOARD_N_MAX];
     int size;
     int goal;
     GameMode mode;
-    EndRule rule;
     BotLevel levels[2];
 };
 
@@ -448,8 +439,7 @@ struct GameSetup
  * turns
  *   total number of turns played.
  */
-struct GameResult
-{
+struct GameResult {
     int winner;
     bool isBot;
     int turns;
@@ -494,28 +484,24 @@ constexpr int DRAW_RESULT = -1;
  *
  * Students do NOT need to modify this module.
  */
-namespace GameLogger
-{
-    // Logging Level
-    /**
-     * Severity level for log messages.
-     */
-    enum class Level
-    {
-        DEBUG,
-        INFO,
-        WARNING,
-        ERROR,
-        MSG,
-    };
+namespace GameLogger {
+// Logging Level
+/**
+ * Severity level for log messages.
+ */
+enum class Level {
+    DEBUG,
+    INFO,
+    WARNING,
+    ERROR,
+    MSG,
+};
 
-    /**
-     * Convert logging level to printable string.
-     */
-    inline std::string levelToString(Level level)
-    {
-        switch (level)
-        {
+/**
+ * Convert logging level to printable string.
+ */
+inline std::string levelToString(Level level) {
+    switch (level) {
         case Level::DEBUG:
             return "DEBUG";
         case Level::INFO:
@@ -528,25 +514,23 @@ namespace GameLogger
             return "";
         default:
             return "UNKNOWN";
-        }
     }
-    inline static Level min_level = Level::DEBUG;
+}
+inline static Level min_level = Level::DEBUG;
 
-    // Level Color
-    const std::string RESET = "\033[0m";
-    const std::string RED = "\033[31m";
-    const std::string GREEN = "\033[32m";
-    const std::string YELLOW = "\033[33m";
-    const std::string BLUE = "\033[34m";
-    const std::string CYAN = "\033[36m";
+// Level Color
+const std::string RESET = "\033[0m";
+const std::string RED = "\033[31m";
+const std::string GREEN = "\033[32m";
+const std::string YELLOW = "\033[33m";
+const std::string BLUE = "\033[34m";
+const std::string CYAN = "\033[36m";
 
-    /**
-     * Return terminal color code corresponding to a log level.
-     */
-    inline std::string getColor(Level level)
-    {
-        switch (level)
-        {
+/**
+ * Return terminal color code corresponding to a log level.
+ */
+inline std::string getColor(Level level) {
+    switch (level) {
         case Level::DEBUG:
             return BLUE;
         case Level::INFO:
@@ -557,36 +541,36 @@ namespace GameLogger
             return RED;
         default:
             return RESET;
-        }
     }
+}
 
-    // Static Variables
-    inline static std::ofstream log_file;
-    inline static bool write_to_file = false;
-    inline static bool is_judge_mode = false;
+// Static Variables
+inline static std::ofstream log_file;
+inline static bool write_to_file = false;
+inline static bool is_judge_mode = false;
 
-    // Functions
-    /**
-     * Initialize logging system.
-     */
-    void init(bool judge_mode, bool to_file = true, const std::string &path = "log.txt");
+// Functions
+/**
+ * Initialize logging system.
+ */
+void init(bool judge_mode, bool to_file = true, const std::string& path = "log.txt");
 
-    /**
-     * Print a log message.
-     */
-    void log(const std::string &msg, Level level = Level::INFO);
+/**
+ * Print a log message.
+ */
+void log(const std::string& msg, Level level = Level::INFO);
 
-    /**
-     * Close log file (if used).
-     */
-    void close();
-} // namespace GameLogger
+/**
+ * Close log file (if used).
+ */
+void close();
+}  // namespace GameLogger
 
 // Run Config
 /**
  * Parse command line arguments.
  */
-RunConfig parseArgs(int argc, char *argv[]);
+RunConfig parseArgs(int argc, char* argv[]);
 
 // Game Interaction
 /**
@@ -619,21 +603,19 @@ RunConfig parseArgs(int argc, char *argv[]);
  *     can ask the user again.
  *
  */
-namespace GameInteraction
-{
-    static std::ifstream global_file_in;
+namespace GameInteraction {
+static std::ifstream global_file_in;
 }
 
-std::streambuf *initInteraction(const RunConfig &config);
-void closeInteraction(std::streambuf *cin_backup);
-bool validateInput(std::string &input);
-bool getInput(int *val);
-bool selectSize(int *size);
-bool selectGoal(int *goal, const int size);
-bool selectEndRule(EndRule *rule);
-bool selectGameMode(GameMode *mode);
-bool selectBotLevel(BotLevel *levels, const int index);
-bool getPlayerMove(int *row, int *col);
+std::streambuf* initInteraction(const RunConfig& config);
+void closeInteraction(std::streambuf* cin_backup);
+bool validateInput(std::string& input);
+bool getInput(int* val);
+bool selectSize(int* size);
+bool selectGoal(int* goal, const int size);
+bool selectGameMode(GameMode* mode);
+bool selectBotLevel(BotLevel* levels, const int index);
+bool getPlayerMove(int* row, int* col);
 
 // Game Renderer
 /**
@@ -659,7 +641,7 @@ void showMove(const int row, const int col);
 void showInvalidMove();
 void showPlayer(const int player, const bool is_bot);
 void showResult(const int winner, const bool is_bot);
-void printResult(const GameResult &gameResult);
+void printResult(const GameResult& gameResult);
 
 // Game Engine
 /**
@@ -691,9 +673,9 @@ void printResult(const GameResult &gameResult);
  *
  */
 
-void startGame(const RunConfig &config, GameSetup &gameSetup);
-GameResult playGame(const RunConfig &config, GameSetup &gameSetup);
-void endGame(const RunConfig &config, GameSetup &gameSetup, GameResult &gameResult);
+void startGame(const RunConfig& config, GameSetup& gameSetup);
+GameResult playGame(const RunConfig& config, GameSetup& gameSetup);
+void endGame(const RunConfig& config, GameSetup& gameSetup, GameResult& gameResult);
 
 // Game Logic
 /**
@@ -753,7 +735,7 @@ bool checkDraw(char board[][BOARD_N_MAX], const int size);
  *
  * @return Coordinate of the chosen move
  */
-pII botMove(char board[][BOARD_N_MAX], const int size, const int goal, const EndRule rule, const char symbol, const BotLevel level);
+pII botMove(char board[][BOARD_N_MAX], const int size, const int goal, const char symbol, const BotLevel level);
 
 // Level 1
 /**
@@ -781,7 +763,7 @@ pII random_pick(char board[][BOARD_N_MAX], const int size);
  *
  * @return Heuristically chosen move
  */
-pII simple_heuristic(char board[][BOARD_N_MAX], const int size, const int goal, const EndRule rule, const char botSymbol, const char playerSymbol);
+pII simple_heuristic(char board[][BOARD_N_MAX], const int size, const int goal, const char botSymbol, const char playerSymbol);
 
 /*
  * NOTE FOR DEVELOPERS
@@ -798,7 +780,7 @@ pII simple_heuristic(char board[][BOARD_N_MAX], const int size, const int goal, 
  * The engine is designed so that new difficulty levels can be
  * implemented without modifying the rest of the game logic.
  */
-pII hard_level(char board[][BOARD_N_MAX], const int size, const int goal, const EndRule rule, const char botSymbol, const char playerSymbol);
+pII hard_level(char board[][BOARD_N_MAX], const int size, const int goal, const char botSymbol, const char playerSymbol);
 
 // Game Helper
 /**
@@ -806,7 +788,7 @@ pII hard_level(char board[][BOARD_N_MAX], const int size, const int goal, const 
  */
 
 template <typename Function>
-auto measureExecutionTime(const std::string &label, Function func, bool enabled)
+auto measureExecutionTime(const std::string& label, Function func, bool enabled)
     -> std::invoke_result_t<Function>;
 
 /* ------------------------------------------------------- */
@@ -880,45 +862,38 @@ auto measureExecutionTime(const std::string &label, Function func, bool enabled)
  *
  * ============================================================
  */
-void GameLogger::init(bool judge_mode, bool to_file, const std::string &path)
-{
+void GameLogger::init(bool judge_mode, bool to_file, const std::string& path) {
     write_to_file = to_file;
     is_judge_mode = judge_mode;
 
-    if (write_to_file)
-    {
+    if (write_to_file) {
         // not append
         // log_file.open(path, std::ios::out | std::ios::app);
 
         // write new log contents
         log_file.open(path, std::ios::out | std::ios::trunc);
-        if (!log_file.is_open())
-        {
+        if (!log_file.is_open()) {
             std::cerr << "[Logger] Cannot open log file: " << path
                       << ". Falling back to console only." << std::endl;
-            write_to_file = false; // fallback
+            write_to_file = false;  // fallback
         }
     }
 
     std::string header = "Tic-tac-toe Game (Version: " + std::string(VERSION) + ")\n";
     header += std::string(48, '-');
 
-    if (write_to_file)
-    {
+    if (write_to_file) {
         log_file << header << std::endl;
     }
 
-    if (!is_judge_mode)
-    {
+    if (!is_judge_mode) {
         std::cout << header << std::endl;
     }
 }
 
-void GameLogger::log(const std::string &msg, Level level)
-{
+void GameLogger::log(const std::string& msg, Level level) {
     // Only log if current level is important as or more than min_level
-    if (static_cast<int>(level) < static_cast<int>(min_level))
-    {
+    if (static_cast<int>(level) < static_cast<int>(min_level)) {
         return;
     }
 
@@ -931,8 +906,7 @@ void GameLogger::log(const std::string &msg, Level level)
     // format: '[Level] - [YYYY-MM-DD HH:MM:SS] Message'
     std::stringstream ss_lv;
     std::string formatted_lv;
-    if (level != Level::MSG)
-    {
+    if (level != Level::MSG) {
         ss_lv << "[" << levelToString(level) << "]";
         formatted_lv = ss_lv.str();
     }
@@ -944,23 +918,19 @@ void GameLogger::log(const std::string &msg, Level level)
     std::string formatted_msg = ss_msg.str();
 
     // to output stream
-    if (write_to_file)
-    {
+    if (write_to_file) {
         log_file << formatted_lv << formatted_msg << std::endl;
         log_file.flush();
     }
 
-    if (!is_judge_mode)
-    {
+    if (!is_judge_mode) {
         std::cout << getColor(level) << formatted_lv;
         std::cout << getColor(Level::MSG) << formatted_msg << RESET << std::endl;
     }
 }
 
-void GameLogger::close()
-{
-    if (log_file.is_open())
-    {
+void GameLogger::close() {
+    if (log_file.is_open()) {
         log_file.close();
     }
 }
@@ -987,34 +957,27 @@ void GameLogger::close()
  *
  * ============================================================
  */
-RunConfig parseArgs(int argc, char *argv[])
-{
+RunConfig parseArgs(int argc, char* argv[]) {
     RunConfig config;
 
-    for (int i = 1; i < argc; ++i)
-    {
+    for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
 
-        if (arg == "-j" || arg == "--judge")
-        {
+        if (arg == "-j" || arg == "--judge") {
             config.judge_mode = true;
             // auto turn off interactive
             config.interactive = false;
-        }
-        else if ((arg == "-i" || arg == "--input") && i + 1 < argc)
-        {
+
+        } else if ((arg == "-i" || arg == "--input") && i + 1 < argc) {
             config.input_file = argv[++i];
-        }
-        else if ((arg == "-l" || arg == "--log") && i + 1 < argc)
-        {
+
+        } else if ((arg == "-l" || arg == "--log") && i + 1 < argc) {
             config.log_file = argv[++i];
-            if (config.log_file == "")
-            {
+            if (config.log_file == "") {
                 config.to_file = false;
             }
-        }
-        else if (arg == "-h" || arg == "--help")
-        {
+
+        } else if (arg == "-h" || arg == "--help") {
             std::cout << "Tic-tac-toe Game (Version: " << VERSION << " by baluong.87)\n";
             std::cout << "Usage: \n"
                       << "\t" << "--judge, -j" << "\t" << "Enable judge mode (no UI, standard output only)\n"
@@ -1067,22 +1030,17 @@ RunConfig parseArgs(int argc, char *argv[])
  */
 
 // Given
-std::streambuf *initInteraction(const RunConfig &config)
-{
-    std::streambuf *cin_backup = nullptr;
+std::streambuf* initInteraction(const RunConfig& config) {
+    std::streambuf* cin_backup = nullptr;
 
-    if (!config.interactive && !config.input_file.empty())
-    {
+    if (!config.interactive && !config.input_file.empty()) {
         GameInteraction::global_file_in.open(config.input_file);
-        if (GameInteraction::global_file_in.is_open())
-        {
+        if (GameInteraction::global_file_in.is_open()) {
             cin_backup = std::cin.rdbuf();
             std::cin.rdbuf(GameInteraction::global_file_in.rdbuf());
 
-            GameLogger::log("redirected cin to: " + config.input_file);
-        }
-        else
-        {
+            GameLogger::log(std::format("redirected cin to: {}", config.input_file));
+        } else {
             GameLogger::log("failed to open input file, using console.", GameLogger::Level::ERROR);
         }
     }
@@ -1090,16 +1048,13 @@ std::streambuf *initInteraction(const RunConfig &config)
 }
 
 // Given
-void closeInteraction(std::streambuf *cin_backup)
-{
-    if (cin_backup)
-    {
+void closeInteraction(std::streambuf* cin_backup) {
+    if (cin_backup) {
         std::cin.rdbuf(cin_backup);
         GameLogger::log("fallback using 'std::cin' input stream.");
     }
 
-    if (GameInteraction::global_file_in.is_open())
-    {
+    if (GameInteraction::global_file_in.is_open()) {
         GameInteraction::global_file_in.close();
     }
 }
@@ -1128,192 +1083,170 @@ void closeInteraction(std::streambuf *cin_backup)
  *   - Only digits 0-9 are allowed.
  *   - Negative numbers are not accepted.
  */
-bool validateInput(std::string &input)
-{
-    if (input.empty())
-    {
-        return false;
-    }
-
-    int dem = 0, chk = 1;
-    for (char c : input)
-    {
-        if (c != ' ' && !std::isdigit(c))
-        {
-            return false;
-        }
-
-        if (std::isdigit(c) && chk)
-        {
-            dem++;
-            chk = 0;
-        }
-        else if (c == ' ')
-        {
-            chk = 1;
-        }
-    }
-
-    if (dem != 1)
-    {
-        return false;
-    }
-
-    return true;
+bool validateInput(std::string& input) {
+    // TODO: implement input validating
+    return false;
 }
 
-bool getInput(int *val)
-{
-
-    std::string line;
-    std::getline(std::cin, line);
-
-    if (!validateInput(line))
-    {
-        return false;
-    }
-
-    int parsed = 0;
-    for (char c : line)
-    {
-        if (parsed > 1000000000)
-        {
-            return false;
-        }
-        if (std::isdigit(c))
-        {
-            parsed = parsed * 10 + (c - '0');
-        }
-    }
-    *val = parsed;
-
-    return true;
+/**
+ * Read a numeric value from input stream.
+ *
+ * Steps:
+ *   1. Read a string from std::cin
+ *   2. Validate the string using validateInput()
+ *   3. Convert the string to integer
+ *
+ * Parameters:
+ *   val : pointer to store the parsed integer
+ *
+ * Return:
+ *   true  -> successful read
+ *   false -> invalid input format
+ *
+ * Notes:
+ *   - Do NOT crash on invalid input
+ *   - Return false so caller can ask again
+ */
+bool getInput(int* val) {
+    // TODO: implement input reading and validation
+    return false;
 }
 
-bool selectSize(int *size)
-{
-    int value;
-    if (!getInput(&value))
-    {
-        return false;
-    }
-
-    if (value < 3 || value > BOARD_N_MAX)
-    {
-        return false;
-    }
-
-    *size = value;
-    return true;
+/**
+ * Ask user to choose board size.
+ *
+ * Allowed range:
+ *   3 <= size <= BOARD_N_MAX
+ *
+ * Example:
+ *   Input: 5
+ *   Board will be 5 x 5
+ *
+ * Parameters:
+ *   size : pointer to store selected board size
+ *
+ * Return:
+ *   true  -> valid selection
+ *   false -> invalid input or out of range
+ *
+ * Hint:
+ *   Use getInput() and check range.
+ */
+bool selectSize(int* size) {
+    // TODO: implement slecting board size
+    return false;
 }
 
-bool selectGoal(int *goal, const int size)
-{
-    int value;
-    if (!getInput(&value))
-    {
-        return false;
-    }
-
-    if (value < 3 || value > size)
-    {
-        return false;
-    }
-
-    *goal = value;
-    return true;
+/**
+ * Ask user to choose the number of consecutive symbols required to win.
+ *
+ * Constraints:
+ *   3 <= goal <= size
+ *
+ * Example:
+ *   size = 5
+ *   goal can be: 3, 4, or 5
+ *
+ * Parameters:
+ *   goal : pointer to store win condition
+ *   size : board size
+ *
+ * Return:
+ *   true  -> valid selection
+ *   false -> invalid selection
+ */
+bool selectGoal(int* goal, const int size) {
+    // TODO: implement slecting game goal
+    return false;
 }
 
-bool selectEndRule(EndRule *rule)
-{
-    int value;
-    if (!getInput(&value))
-    {
-        return false;
-    }
-
-    switch (value)
-    {
-    case 1:
-        *rule = EndRule::NONE;
-        return true;
-    case 2:
-        *rule = EndRule::OPEN_ONE;
-        return true;
-    case 3:
-        *rule = EndRule::OPEN_TWO;
-        return true;
-    default:
-        return false;
-    }
+/**
+ * Ask user to select game mode.
+ *
+ * Available modes:
+ *
+ *   1 -> Player vs Player
+ *   2 -> Player vs Bot
+ *   3 -> Bot vs Bot
+ *
+ * Parameters:
+ *   mode : pointer to store selected mode
+ *
+ * Return:
+ *   true  -> valid choice
+ *   false -> invalid input
+ */
+bool selectGameMode(GameMode* mode) {
+    // TODO: implement slecting game mode
+    return false;
 }
 
-bool selectGameMode(GameMode *mode)
-{
-    int value;
-    if (!getInput(&value))
-    {
-        return false;
-    }
-
-    switch (value)
-    {
-    case 1:
-        *mode = GameMode::PVP;
-        return true;
-    case 2:
-        *mode = GameMode::PVE;
-        return true;
-    case 3:
-        *mode = GameMode::EVE;
-        return true;
-    default:
-        return false;
-    }
+/**
+ * Ask the user to select the bot difficulty level.
+ *
+ * Available level:
+ *
+ *   1 -> EASY
+ *   2 -> MEDIUM
+ *   3 -> HARD
+ *
+ * The selected level will be written into the provided
+ * BotLevel array at the given index.
+ *
+ * Parameters:
+ *
+ *   levels  - Pointer to the bot level array used in the game
+ *   index   - Position in the array where the selected level
+ *             will be stored
+ *
+ * Return:
+ *
+ *   true  -> Level selected successfully
+ *   false -> Invalid input
+ *
+ * Notes:
+ *   - Player vs Bot -> index = 1
+ *   - Bot vs Bot -> index in [0, 1]
+ *
+ */
+bool selectBotLevel(BotLevel* levels, const int index) {
+    // TODO: implement slecting bot level
+    return false;
 }
 
-bool selectBotLevel(BotLevel *levels, const int index)
-{
-    int value;
-    if (!getInput(&value))
-    {
-        return false;
-    }
-
-    switch (value)
-    {
-    case 1:
-        levels[index] = BotLevel::EASY;
-        return true;
-    case 2:
-        levels[index] = BotLevel::MEDIUM;
-        return true;
-    case 3:
-        levels[index] = BotLevel::HARD;
-        return true;
-    default:
-        return false;
-    }
-}
-
-bool getPlayerMove(int *row, int *col)
-{
-    std::string line;
-    if (!std::getline(std::cin, line))
-    {
-        return false;
-    }
-
-    std::stringstream ss(line);
-    int r, c;
-    if (!(ss >> r >> c))
-    {
-        return false;
-    }
-
-    *row = r;
-    *col = c;
-    return true;
+/**
+ * Read a player's move from input.
+ *
+ * Expected input format:
+ *
+ *   row col
+ *
+ * Example:
+ *
+ *   1 2
+ *
+ * Means:
+ *   place symbol at board[1][2]
+ *
+ * Parameters:
+ *   row : pointer storing row index
+ *   col : pointer storing column index
+ *
+ * Return:
+ *   true  -> input successfully parsed
+ *   false -> invalid format
+ *
+ * Notes:
+ *   - Range checking is done later using isValidMove().
+ *   - Coordinates are ZERO-BASED.
+ *
+ * Example:
+ * 0 0 -> top-left corner
+ *
+ */
+bool getPlayerMove(int* row, int* col) {
+    // TODO: implement slecting player move
+    return false;
 }
 
 /* ---------- Game Renderer ---------- */
@@ -1363,8 +1296,7 @@ bool getPlayerMove(int *row, int *col)
  * If the terminal does not support ANSI escape codes,
  * the game will still run but the screen may not clear.
  */
-void clearScreen()
-{
+void clearScreen() {
     std::cout << "\n"
               << "\x1B[2J\x1B[H"
               << "\n";
@@ -1391,83 +1323,76 @@ void clearScreen()
  *   PLAYER_UI          -> ask player move input
  *   MUL_BOT_LEVEL_UI   -> select bot levels for EvE
  */
-void showSelectMenu(SelectType selectType)
-{
-    switch (selectType)
-    {
-    case SelectType::TITLE_UI:
-        std::cout << ">----- Tic-tac-toe [Console v" << VERSION << "] -----<\n\n";
-        break;
+void showSelectMenu(SelectType selectType) {
+    switch (selectType) {
+        case SelectType::TITLE_UI:
+            std::cout << std::format(">----- Tic-tac-toe [Console v{}] -----<\n\n", VERSION);
+            break;
 
-    case SelectType::SIZE_UI:
-        std::cout << "Select board size (NxN, 3 <= N <= " << BOARD_N_MAX << "): ";
-        break;
+        case SelectType::SIZE_UI:
+            // TODO: display board size selection
+            // Example: "Size Input (NxN, 3 <= N <= BOARD_N_MAX)"
+            break;
 
-    case SelectType::GOAL_UI:
-        std::cout << "Select goal (consecutive symbols to win): ";
-        break;
+        case SelectType::GOAL_UI:
+            // TODO: display goal selection
+            // Example: "Goal Input (3 - 5, goal <= size)"
+            break;
 
-    case SelectType::END_RULE_UI:
-        std::cout << "Select end-rule: (1) None | (2) One end | (3) Two ends : ";
-        break;
+        case SelectType::GAME_MODE_UI:
+            // TODO: display game mode selection
+            // Example: "(1) PvP | (2) PvE | (3) EvE"
+            break;
 
-    case SelectType::GAME_MODE_UI:
-        std::cout << "Select mode: (1) PvP | (2) PvE | (3) EvE : ";
-        break;
+        case SelectType::BOT_LEVEL_UI:
+            // TODO: display bot level selection
+            // Example: "(1) EASY | (2) MEDIUM | (3) HARD"
+            break;
 
-    case SelectType::BOT_LEVEL_UI:
-        std::cout << "Select bot level: (1) EASY | (2) MEDIUM | (3) HARD : ";
-        break;
+        case SelectType::PLAYER_UI:
+            // TODO: display player move prompt
+            // Example input format: "(row, col)"
+            break;
 
-    case SelectType::PLAYER_UI:
-        std::cout << "Enter move (row col): ";
-        break;
+        case SelectType::MUL_BOT_LEVEL_UI:
+            // TODO: display multiple bot level selection
+            // Example input format: "(bot1_level, bot2_level)"
+            break;
 
-    case SelectType::MUL_BOT_LEVEL_UI:
-        std::cout << "Select bot levels for both bots. First bot then second bot.\n";
-        break;
-
-    default:
-        break;
+        default:
+            break;
     }
 
     return;
 }
 
-void displayBoard(const char board[][BOARD_N_MAX], const int size)
-{
-    std::cout << "    ";
-    for (int j = 0; j < size; ++j)
-    {
-        std::cout << j << " ";
-    }
-    std::cout << "\n";
-
-    std::cout << "   ";
-    for (int j = 0; j < size; ++j)
-    {
-        std::cout << "--";
-    }
-    std::cout << "-\n";
-
-    for (int i = 0; i < size; ++i)
-    {
-        if (i > 9)
-        {
-            std::cout << i << " |";
-        }
-        else
-        {
-            std::cout << " " << i << " |";
-        }
-        for (int j = 0; j < size; ++j)
-        {
-            std::cout << board[i][j];
-            if (j < size - 1)
-                std::cout << " ";
-        }
-        std::cout << "\n";
-    }
+/**
+ * Render the game board to the console.
+ *
+ * Example output (size = 3):
+ *
+ *     0 1 2
+ *   --------
+ * 0 |X - O
+ * 1 |- X -
+ * 2 |O - X
+ *
+ * Parameters:
+ *
+ *   board : 2D board array representing the game state
+ *   size  : dimension of the board (NxN)
+ *
+ * Hint:
+ *
+ *   Use nested loops to print rows and columns.
+ *   Each cell contains either:
+ *
+ *     'X' -> player 1
+ *     'O' -> player 2
+ *     '-' -> empty cell
+ */
+void displayBoard(const char board[][BOARD_N_MAX], const int size) {
+    // TODO:
 }
 
 /**
@@ -1483,54 +1408,71 @@ void displayBoard(const char board[][BOARD_N_MAX], const int size)
  *   Player 1's turn
  *   Bot (Player 2) is thinking...
  */
-void showPlayer(int player, bool is_bot)
-{
-    if (is_bot)
-    {
-        std::cout << "Bot (Player " << player << ") is thinking...\n";
-    }
-    else
-    {
-        std::cout << "Player " << player << "'s turn.\n";
-    }
+void showPlayer(int player, bool is_bot) {
+    // TODO:
 }
 
-void showMove(const int row, const int col)
-{
-    std::cout << "Move placed at (" << row << ", " << col << ")\n";
+/**
+ * Display the move selected by a player.
+ *
+ * Parameters:
+ *
+ *   row : row index of the move
+ *   col : column index of the move
+ *
+ * Example output:
+ *
+ *   Move placed at (1, 2)
+ */
+void showMove(const int row, const int col) {
+    // TODO:
 }
 
-void showInvalidMove()
-{
-    std::cout << "Invalid move. Try again.\n";
+/**
+ * Display an error message when a move is invalid.
+ *
+ * This occurs when:
+ *
+ *   - The selected cell is already occupied
+ *   - The move is outside the board
+ */
+void showInvalidMove() {
+    // TODO:
 }
 
-void showResult(const int winner, const bool is_bot)
-{
-    if (winner == DRAW_RESULT)
-    {
-        std::cout << "It's a draw!\n";
-        return;
-    }
-
-    if (is_bot)
-    {
-        std::cout << "Bot (Player " << winner << ") wins!\n";
-    }
-    else
-    {
-        std::cout << "Player " << winner << " wins!\n";
-    }
+/**
+ * Display the final result of the game.
+ *
+ * Parameters:
+ *
+ *   winner : player number (1 or 2), or 0 if draw
+ *   is_bot : true if the winner is a bot
+ *
+ * Example output:
+ *
+ *   Player 1 wins!
+ *   Bot wins!
+ *   It's a draw!
+ */
+void showResult(const int winner, const bool is_bot) {
+    // TODO:
 }
 
-void printResult(const GameResult &gameResult)
-{
-    int winner = gameResult.winner;
-    if (gameResult.winner != DRAW_RESULT)
-    {
-        winner -= 1;
-    }
-    std::cout << winner << " " << gameResult.turns << '\n';
+/**
+ * Print the result in non-interactive mode.
+ *
+ * This function is used when the game is executed
+ * in automated or testing environments where
+ * interactive UI is disabled.
+ *
+ * Parameters:
+ *
+ *   gameResult : structure containing the final
+ *                result of the game.
+ */
+void printResult(const GameResult& gameResult) {
+    // used for non-interactive mode
+    // TODO:
 }
 
 /* ---------- Game Engine ---------- */
@@ -1566,103 +1508,36 @@ void printResult(const GameResult &gameResult)
  * ============================================================
  */
 
-void startGame(const RunConfig &config, GameSetup &gameSetup)
-{
-    if (config.interactive)
-    {
-        clearScreen();
-        showSelectMenu(SelectType::TITLE_UI);
-    }
+void startGame(const RunConfig& config,
+               GameSetup& gameSetup) {
+    // TODO:
+    // 1. Clear screen if interactive mode
+    // if (config.interactive) clearScreen();
 
-    if (config.interactive)
-        showSelectMenu(SelectType::SIZE_UI);
+    // 2. Show game title
+    // showSelectMenu(SelectType::TITLE_UI);
 
-    while (!selectSize(&gameSetup.size))
-    {
-        if (config.interactive)
-        {
-            std::cout << "Invalid size. Please try again.\n";
-        }
-    }
+    // 3. Ask user for board size
+    // repeat until valid:
+    // showSelectMenu(SelectType::SIZE_UI);
+    // selectSize(&gameSetup.size);
 
-    if (config.interactive)
-        showSelectMenu(SelectType::GOAL_UI);
+    // 4. Ask user for win condition (goal)
+    // showSelectMenu(SelectType::GOAL_UI);
+    // selectGoal(&gameSetup.goal, gameSetup.size);
 
-    while (!selectGoal(&gameSetup.goal, gameSetup.size))
-    {
-        if (config.interactive)
-        {
-            std::cout << "Invalid goal. Please try again.\n";
-        }
-    }
+    // 5. Ask for game mode
+    // showSelectMenu(SelectType::GAME_MODE_UI);
+    // selectGameMode(&gameSetup.mode);
 
-    if (config.interactive)
-        showSelectMenu(SelectType::END_RULE_UI);
+    // 6. If mode == PVE
+    // ask bot difficulty for player 2
 
-    while (!selectEndRule(&gameSetup.rule))
-    {
-        if (config.interactive)
-        {
-            std::cout << "Invalid end-rule. Please try again.\n";
-        }
-    }
+    // 7. If mode == EVE
+    // ask bot difficulty for both bots
 
-    if (config.interactive)
-        showSelectMenu(SelectType::GAME_MODE_UI);
-
-    while (!selectGameMode(&gameSetup.mode))
-    {
-        if (config.interactive)
-        {
-            std::cout << "Invalid mode. Please try again.\n";
-        }
-    }
-
-    gameSetup.levels[0] = BotLevel::INVALID_LV;
-    gameSetup.levels[1] = BotLevel::INVALID_LV;
-
-    if (gameSetup.mode == GameMode::PVE)
-    {
-        if (config.interactive)
-            showSelectMenu(SelectType::BOT_LEVEL_UI);
-
-        while (!selectBotLevel(gameSetup.levels, 1))
-        {
-            if (config.interactive)
-            {
-                std::cout << "Invalid bot level. Please try again.\n";
-            }
-        }
-    }
-    else if (gameSetup.mode == GameMode::EVE)
-    {
-        if (config.interactive)
-            showSelectMenu(SelectType::MUL_BOT_LEVEL_UI);
-
-        if (config.interactive)
-            showSelectMenu(SelectType::BOT_LEVEL_UI);
-
-        while (!selectBotLevel(gameSetup.levels, 0))
-        {
-            if (config.interactive)
-            {
-                std::cout << "Invalid bot level. Please try again.\n";
-            }
-        }
-
-        if (config.interactive)
-            showSelectMenu(SelectType::BOT_LEVEL_UI);
-
-        while (!selectBotLevel(gameSetup.levels, 1))
-        {
-            if (config.interactive)
-            {
-                std::cout << "Invalid bot level. Please try again.\n";
-            }
-        }
-    }
-
-    initBoard(gameSetup.board, gameSetup.size);
+    // 8. Initialize board
+    // initBoard(gameSetup.board, gameSetup.size);
 }
 
 /**
@@ -1707,164 +1582,90 @@ void startGame(const RunConfig &config, GameSetup &gameSetup)
  *      - number of turns
  *      - whether winner is bot
  */
-
-long long move_score[BOARD_N_MAX + 3][3][3];
-
-void init_score_value(int goal)
-{
-    for (int i = 0; i <= goal; ++i)
-    {
-        for (int j = 0; j < 3; ++j)
-        {
-            for (int k = 0; k < 3; ++k)
-            {
-                if (j == 0 || i < 2)
-                    move_score[i][j][k] = 0;
-                else
-                    move_score[i][j][k] = 10 + i + j;
-            }
-        }
-    }
-
-    // none
-    move_score[goal][2][0] = pow(10, 5);
-    move_score[goal][1][0] = pow(10, 5);
-    move_score[goal][0][0] = pow(10, 5);
-    move_score[goal - 1][2][0] = pow(10, 4);
-    move_score[goal - 1][1][0] = pow(10, 3);
-    if (goal > 3)
-        move_score[goal - 2][2][0] = pow(10, 2);
-
-    // one end
-    move_score[goal][2][1] = pow(10, 5);
-    move_score[goal][1][1] = pow(10, 5);
-    move_score[goal - 1][2][1] = pow(10, 4);
-    move_score[goal - 1][1][1] = pow(10, 3);
-    if (goal > 3)
-        move_score[goal - 2][2][1] = pow(10, 2);
-
-    // two end
-    move_score[goal][2][2] = pow(10, 5);
-    move_score[goal][1][2] = pow(10, 3);
-    move_score[goal - 1][2][2] = pow(10, 3);
-}
-
-GameResult playGame(const RunConfig &config, GameSetup &gameSetup)
-{
+GameResult playGame(const RunConfig& config,
+                    GameSetup& gameSetup) {
     GameResult result;
-    int currentPlayer = 0;
-    char symbols[2] = {'X', 'O'};
-    int turns = 0;
 
-    init_score_value(gameSetup.goal);
+    // TODO:
+    // 1. Initialize variables
+    //    - current player index
+    //    - symbol mapping ('X', 'O')
+    //    - turn counter
 
-    while (true)
-    {
-        if (config.interactive)
-        {
-            clearScreen();
-            displayBoard(gameSetup.board, gameSetup.size);
-        }
+    // Example idea:
+    // int currentPlayer = 0;
+    // char symbols[2] = {'X','O'};
+    // int turns = 0;
 
-        bool isBot = (gameSetup.mode == GameMode::EVE) ||
-                     (gameSetup.mode == GameMode::PVE && currentPlayer == 1);
+    // 2. Main game loop
+    // while(true)
 
-        if (config.interactive)
-            showPlayer(currentPlayer + 1, isBot);
+    //      a) display board
+    //      displayBoard(...)
 
-        int row = -1;
-        int col = -1;
+    //      b) determine if player is human or bot
 
-        if (isBot)
-        {
-            pII point = measureExecutionTime(
-                "botMove",
-                [&]()
-                {
-                    return botMove(gameSetup.board,
-                                   gameSetup.size,
-                                   gameSetup.goal,
-                                   gameSetup.rule,
-                                   symbols[currentPlayer],
-                                   gameSetup.levels[currentPlayer]);
-                },
-                TIME_ENABLED);
+    //      c) get move
+    //         human -> getPlayerMove()
+    //         bot   -> botMove()
 
-            row = point.first;
-            col = point.second;
-        }
-        else
-        {
-            bool moveParsed = false;
-            while (!moveParsed)
-            {
-                if (config.interactive)
-                    showSelectMenu(SelectType::PLAYER_UI);
+    //         log bot runtime -> measureExecutionTime()
 
-                if (!getPlayerMove(&row, &col))
-                {
-                    if (config.interactive)
-                        showInvalidMove();
-                    continue;
-                }
+    // // Running Bot Move with meansure runtime
+    // pII point = measureExecutionTime(
+    //     "botMove",
+    //     [&]() {
+    //         return botMove(gameSetup.board,
+    //                        gameSetup.size,
+    //                        gameSetup.goal,
+    //                        symbols[player],
+    //                        gameSetup.levels[player]);
+    //     },
+    //     TIME_ENABLED);
 
-                if (!isValidMove(gameSetup.board, gameSetup.size, row, col))
-                {
-                    if (config.interactive)
-                        showInvalidMove();
-                    continue;
-                }
+    //      d) validate move
+    //         isValidMove(...)
 
-                moveParsed = true;
-            }
-        }
+    //      e) apply move
+    //         makeMove(...)
 
-        makeMove(gameSetup.board, row, col, symbols[currentPlayer]);
-        if (config.interactive)
-            showMove(row, col);
+    //      f) check win
+    //         checkWin(...)
 
-        turns++;
+    //      g) check draw
+    //         checkDraw(...)
 
-        if (checkWin(gameSetup.board, gameSetup.size, symbols[currentPlayer], gameSetup.goal, gameSetup.rule))
-        {
-            result.winner = currentPlayer + 1;
-            result.turns = turns;
-            result.isBot = isBot;
-            return result;
-        }
+    //      h) switch player
+    //         currentPlayer = 1 - currentPlayer
 
-        if (checkDraw(gameSetup.board, gameSetup.size))
-        {
-            result.winner = DRAW_RESULT;
-            result.turns = turns;
-            result.isBot = false;
-            return result;
-        }
-
-        currentPlayer = 1 - currentPlayer;
-    }
+    // 3. fill GameResult structure
+    // result.winner
+    // result.turns
+    // result.isBot
 
     return result;
 }
 
-void endGame(const RunConfig &config, GameSetup &gameSetup, GameResult &gameResult)
-{
-    if (config.interactive)
-    {
-        clearScreen();
-        displayBoard(gameSetup.board, gameSetup.size);
-        showResult(gameResult.winner, gameResult.isBot);
-    }
-    else
-    {
-        printResult(gameResult);
-    }
+void endGame(const RunConfig& config,
+             GameSetup& gameSetup,
+             GameResult& gameResult) {
+    // TODO:
+    // 1. If interactive mode
+    //      clear screen
+    //      display final board
+    //      show result
 
-    std::stringstream ss;
-    ss << "Game ended: winner=" << gameResult.winner
-       << ", turns=" << gameResult.turns
-       << ", isBot=" << (gameResult.isBot ? "true" : "false");
-    GameLogger::log(ss.str());
+    // Example:
+    // clearScreen();
+    // displayBoard(gameSetup.board, gameSetup.size);
+    // showResult(gameResult.winner, gameResult.isBot);
+
+    // 2. If judge mode
+    //      print minimal result
+    // Example:
+    // printResult(gameResult);
+
+    // 3. (optional) log result using GameLogger
 }
 
 /* ---------- Game Logic ---------- */
@@ -1927,38 +1728,37 @@ void endGame(const RunConfig &config, GameSetup &gameSetup, GameResult &gameResu
  * Hint:
  *   Use nested loops.
  */
-void initBoard(char board[][BOARD_N_MAX], const int size)
-{
+void initBoard(char board[][BOARD_N_MAX],
+               const int size) {
     // TODO: initialize board
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            board[i][j] = '-';
-        }
-    }
 }
 
-bool isValidMove(const char board[][BOARD_N_MAX], const int size, const int row, const int col)
-{
-    if (row < 0 || row >= size || col < 0 || col >= size)
-    {
-        return false;
-    }
-    return board[row][col] == '-';
+bool isValidMove(const char board[][BOARD_N_MAX],
+                 const int size,
+                 const int row,
+                 const int col) {
+    // TODO: validate move
+    return false;
 }
 
-void makeMove(char board[][BOARD_N_MAX], const int row, const int col, const char symbol)
-{
-    board[row][col] = symbol;
+void makeMove(char board[][BOARD_N_MAX],
+              const int row,
+              const int col,
+              const char symbol) {
+    // TODO: making move
 }
 
-bool isEmptyHead(char board[][BOARD_N_MAX], int size, int x, int y, const char symbol)
-{
-    if (0 <= x && x < size && 0 <= y && y < size && (board[x][y] == '-' || board[x][y] == symbol))
-    {
-        return true;
-    }
+bool isEmptyHead(char board[][BOARD_N_MAX],
+                 int size,
+                 int x,
+                 int y,
+                 const char symbol) {
+    // TODO: checking empty head, using for checkWin
+    // An empty head can be:
+    // - on board boundary
+    // - is empty symbol ('-')
+    // - equal to current symbol
+
     return false;
 }
 
@@ -1989,75 +1789,36 @@ bool isEmptyHead(char board[][BOARD_N_MAX], int size, int x, int y, const char s
  *   true  -> player wins
  *   false -> no win detected
  */
-bool checkWin(char board[][BOARD_N_MAX], const int size, const char symbol, const int goal, EndRule rule)
-{
-    const int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
-
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] != symbol)
-            {
-                continue;
-            }
-
-            for (int d = 0; d < 4; ++d)
-            {
-                int dx = directions[d][0];
-                int dy = directions[d][1];
-                int count = 0;
-
-                for (int k = 0; k < goal; ++k)
-                {
-                    int nx = i + dx * k;
-                    int ny = j + dy * k;
-                    if (nx < 0 || nx >= size || ny < 0 || ny >= size || board[nx][ny] != symbol)
-                    {
-                        break;
-                    }
-                    count++;
-                }
-
-                if (count < goal)
-                    continue;
-
-                if (rule == EndRule::NONE)
-                {
-                    return true;
-                }
-
-                bool leftAvailable = isEmptyHead(board, size, i - dx, j - dy, symbol);
-                bool rightAvailable = isEmptyHead(board, size, i + dx * goal, j + dy * goal, symbol);
-
-                if (rule == EndRule::OPEN_ONE && (leftAvailable || rightAvailable))
-                {
-                    return true;
-                }
-                if (rule == EndRule::OPEN_TWO && leftAvailable && rightAvailable)
-                {
-                    return true;
-                }
-            }
-        }
-    }
+bool checkWin(char board[][BOARD_N_MAX],
+              const int size,
+              const char symbol,
+              const int goal,
+              EndRule rule) {
+    // TODO: student implementation
 
     return false;
 }
 
-bool checkDraw(char board[][BOARD_N_MAX], const int size)
-{
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] == '-')
-            {
-                return false;
-            }
-        }
-    }
-    return true;
+/**
+ * Determine whether the game is a draw.
+ *
+ * A draw occurs when:
+ *
+ *   - The board is full
+ *   - No player has won
+ *
+ * Parameters:
+ *   board : current board
+ *   size  : board size
+ *
+ * Return:
+ *   true  -> draw
+ *   false -> game can continue
+ */
+bool checkDraw(char board[][BOARD_N_MAX],
+               const int size) {
+    // TODO: detect if the board has no empty cells
+    return false;
 }
 
 /* ---------- Bot Move Logic ---------- */
@@ -2087,39 +1848,39 @@ bool checkDraw(char board[][BOARD_N_MAX], const int size)
 pII botMove(char board[][BOARD_N_MAX],
             const int size,
             const int goal,
-            const EndRule rule,
             const char symbol,
-            const BotLevel level)
-{
+            const BotLevel level) {
     char opponent = (symbol == 'X') ? 'O' : 'X';
 
-    switch (level)
-    {
-    case BotLevel::EASY:
-        // REQUIRED
-        return random_pick(board, size);
+    switch (level) {
+        case BotLevel::EASY:
+            // REQUIRED
+            return random_pick(board, size);
 
-    case BotLevel::MEDIUM:
-        // OPTIONAL
-        // Suggestion:
-        // - try winning move
-        // - block opponent winning move
-        // - otherwise choose a heuristic position
+        case BotLevel::MEDIUM:
+            // OPTIONAL
+            // Suggestion:
+            // - try winning move
+            // - block opponent winning move
+            // - otherwise choose a heuristic position
 
-        return simple_heuristic(board, size, goal, rule, symbol, opponent);
+            return simple_heuristic(board, size, goal, symbol, opponent);
 
-    case BotLevel::HARD:
-        // BONUS
-        // Design your own strategy.
-        // Possible approaches:
-        //   - search algorithm
-        //   - evaluation function
-        //   - pattern detection
+        case BotLevel::HARD:
+            // BONUS
+            // Design your own strategy.
+            // Possible approaches:
+            //   - search algorithm
+            //   - evaluation function
+            //   - pattern detection
 
-        return hard_level(board, size, goal, rule, symbol, opponent);
+            // return hard_level(board, size, goal, symbol, opponent)
 
-    default:
-        return random_pick(board, size);
+            // fallback (avoid crash)
+            return random_pick(board, size);
+
+        default:
+            return random_pick(board, size);
     }
 }
 
@@ -2139,28 +1900,12 @@ pII botMove(char board[][BOARD_N_MAX],
  *   board[i][j] == '-' means empty cell
  */
 
-pII random_pick(char board[][BOARD_N_MAX], const int size)
-{
-    std::vector<pII> emptyCells;
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] == '-')
-            {
-                emptyCells.push_back(std::make_pair(i, j));
-            }
-        }
-    }
+pII random_pick(char board[][BOARD_N_MAX],
+                const int size) {
+    // TODO: student implementation
 
-    if (emptyCells.empty())
-    {
-        return std::make_pair(-1, -1);
-    }
-
-    std::uniform_int_distribution<int> dist(0, static_cast<int>(emptyCells.size()) - 1);
-    int idx = dist(generator);
-    return emptyCells[idx];
+    // placeholder
+    return std::make_pair(-1, -1);
 }
 
 // Level 2
@@ -2182,190 +1927,15 @@ pII random_pick(char board[][BOARD_N_MAX], const int size)
  *   - extend current lines
  */
 
-double cal_score(char board[][BOARD_N_MAX], int size, int x, int y, int dx, int dy, char symbol, int goal, EndRule rule)
-{
-    int count = 1;
-    int block = 0;
-
-    int step = 1;
-    while (true)
-    {
-        int nx = x + dx * step;
-        int ny = y + dy * step;
-
-        if (nx < 0 || nx >= size || ny < 0 || ny >= size)
-        {
-            block++;
-            break;
-        }
-
-        if (board[nx][ny] == symbol)
-        {
-            count++;
-            step++;
-        }
-        else if (board[nx][ny] != '-')
-        {
-            block++;
-            break;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    step = 1;
-    while (true)
-    {
-        int nx = x - dx * step;
-        int ny = y - dy * step;
-
-        if (nx < 0 || nx >= size || ny < 0 || ny >= size)
-        {
-            block++;
-            break;
-        }
-
-        if (board[nx][ny] == symbol)
-        {
-            count++;
-            step++;
-        }
-        else if (board[nx][ny] != '-')
-        {
-            block++;
-            break;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    if (count > goal)
-    {
-        block -= (count - goal);
-        count = goal;
-    }
-
-    int rule_index = 0;
-    if (rule == EndRule::OPEN_ONE)
-    {
-        rule_index = 1;
-    }
-    else if (rule == EndRule::OPEN_TWO)
-    {
-        rule_index = 2;
-    }
-
-    double result = move_score[count][2 - block][rule_index] * 1.0;
-    if (dx + dy != 1 && count > 1)
-    {
-        result += 0.1;
-    }
-    return result;
-}
-
-const int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
-
-void update_max_score(double &max_score, pII &best_move, char &pre_char, double score, int x, int y, char current_char, char botSymbol)
-{
-    std::string max_score_str = std::to_string((int)max_score);
-    std::string score_str = std::to_string((int)score);
-
-    if (max_score == -1 || pre_char == current_char || max_score_str.length() != score_str.length())
-    {
-        if (score > max_score)
-        {
-            max_score = score;
-            best_move = std::make_pair(x, y);
-            pre_char = current_char;
-        }
-    }
-    else
-    {
-        if (current_char == botSymbol)
-        {
-            max_score = score;
-            best_move = std::make_pair(x, y);
-            pre_char = current_char;
-        }
-    }
-}
-
-pII find_best_move(char board[][BOARD_N_MAX],
-                   const int size,
-                   const int goal,
-                   const EndRule rule,
-                   const char botSymbol,
-                   const char playerSymbol)
-{
-    double max_score = -1;
-    pII best_move = std::make_pair(-1, -1);
-    char pre_char = '-';
-
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] != '-')
-            {
-                continue;
-            }
-
-            double bot_score = 0;
-            for (int d = 0; d < 4; ++d)
-            {
-                int dx = directions[d][0];
-                int dy = directions[d][1];
-                bot_score += cal_score(board, size, i, j, dx, dy, botSymbol, goal, rule);
-            }
-
-            update_max_score(max_score, best_move, pre_char, bot_score, i, j, botSymbol, botSymbol);
-
-            double player_score = 0;
-            for (int d = 0; d < 4; ++d)
-            {
-                int dx = directions[d][0];
-                int dy = directions[d][1];
-                player_score += cal_score(board, size, i, j, dx, dy, playerSymbol, goal, rule);
-            }
-
-            update_max_score(max_score, best_move, pre_char, player_score, i, j, playerSymbol, botSymbol);
-        }
-    }
-
-    return best_move;
-}
-
 pII simple_heuristic(char board[][BOARD_N_MAX],
                      const int size,
                      const int goal,
-                     const EndRule rule,
                      const char botSymbol,
-                     const char playerSymbol)
-{
+                     const char playerSymbol) {
+    // TODO: student implementation
 
-    int chk = 0;
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] != '-')
-            {
-                chk = 1;
-                break;
-            }
-        }
-    }
-
-    if (chk == 0)
-    {
-        return std::make_pair(size / 2, size / 2);
-    }
-
-    return find_best_move(board, size, goal, rule, botSymbol, playerSymbol);
+    // fallback
+    return random_pick(board, size);
 }
 
 // Level 3
@@ -2385,152 +1955,15 @@ pII simple_heuristic(char board[][BOARD_N_MAX],
  * You may also combine multiple techniques.
  */
 
-struct board_lim
-{
-    int min_x, min_y, max_x, max_y;
-};
-
-struct BMove
-{
-    int x, y;
-    double score;
-};
-
-double evaluatePoint(char board[][BOARD_N_MAX], int size, int x, int y, char symbol, int goal, EndRule rule)
-{
-    double score = 0;
-
-    for (int d = 0; d < 4; ++d)
-    {
-        int dx = directions[d][0];
-        int dy = directions[d][1];
-        score += cal_score(board, size, x, y, dx, dy, symbol, goal, rule);
-    }
-
-    return score;
-}
-
-board_lim update(board_lim lim, int x, int y, int size)
-{
-    lim.min_x = std::min(lim.min_x, std::max(0, x - 1));
-    lim.min_y = std::min(lim.min_y, std::max(0, y - 1));
-    lim.max_x = std::max(lim.max_x, std::min(size - 1, x + 1));
-    lim.max_y = std::max(lim.max_y, std::min(size - 1, y + 1));
-    return lim;
-}
-
-BMove minimax(char board[][BOARD_N_MAX],
-              int size,
-              board_lim lim,
-              char botSymbol,
-              char playerSymbol,
-              int goal,
-              EndRule rule,
-              int depth,
-              bool maximizingPlayer,
-              double alpha,
-              double beta,
-              double score = 0)
-{
-
-    if (depth == 0)
-    {
-        return {-1, -1, score};
-    }
-    else if (checkWin(board, size, botSymbol, goal, rule))
-    {
-        return {-1, -1, 1000000};
-    }
-    else if (checkWin(board, size, playerSymbol, goal, rule))
-    {
-        return {-1, -1, -1000000};
-    }
-    else if (checkDraw(board, size))
-    {
-        return {-1, -1, 0};
-    }
-
-    BMove bestMove = {-1, -1, maximizingPlayer ? -1e9 : 1e9};
-
-    for (int i = lim.min_x; i <= lim.max_x; ++i)
-    {
-        for (int j = lim.min_y; j <= lim.max_y; ++j)
-        {
-            if (board[i][j] == '-')
-            {
-                if (maximizingPlayer)
-                {
-                    board[i][j] = botSymbol;
-                    double scorePoint = evaluatePoint(board, size, i, j, botSymbol, goal, rule);
-                    board_lim nlim = update(lim, i, j, size);
-                    BMove move = minimax(board, size, nlim, botSymbol, playerSymbol, goal, rule, depth - 1, false, alpha, beta, score + scorePoint);
-                    board[i][j] = '-';
-                    move.x = i;
-                    move.y = j;
-                    if (move.score > bestMove.score)
-                    {
-                        bestMove = move;
-                    }
-                    alpha = std::max(alpha, bestMove.score);
-                    if (beta <= alpha)
-                        break;
-                }
-                else
-                {
-                    board[i][j] = playerSymbol;
-                    double scorePoint = evaluatePoint(board, size, i, j, playerSymbol, goal, rule);
-                    board_lim nlim = update(lim, i, j, size);
-                    BMove move = minimax(board, size, nlim, botSymbol, playerSymbol, goal, rule, depth - 1, true, alpha, beta, score - scorePoint);
-                    board[i][j] = '-';
-                    move.x = i;
-                    move.y = j;
-                    if (move.score < bestMove.score)
-                    {
-                        bestMove = move;
-                    }
-                    beta = std::min(beta, bestMove.score);
-                    if (beta <= alpha)
-                        break;
-                }
-            }
-        }
-    }
-
-    return bestMove;
-}
-
 pII hard_level(char board[][BOARD_N_MAX],
                const int size,
                const int goal,
-               const EndRule rule,
                const char botSymbol,
-               const char playerSymbol)
-{
+               const char playerSymbol) {
     // TODO: optional bonus implementation
 
-    board_lim lim;
-    lim.min_x = size;
-    lim.min_y = size;
-    lim.max_x = -1;
-    lim.max_y = -1;
-
-    for (int i = 0; i < size; ++i)
-    {
-        for (int j = 0; j < size; ++j)
-        {
-            if (board[i][j] != '-')
-            {
-                lim = update(lim, i, j, size);
-            }
-        }
-    }
-
-    if (lim.max_x == -1)
-    {
-        return std::make_pair(size / 2, size / 2);
-    }
-    BMove bestMove = minimax(board, size, lim, botSymbol, playerSymbol, goal, rule, 4, true, -1e9, 1e9, 0);
-    return {bestMove.x, bestMove.y};
+    // fallback
+    return random_pick(board, size);
 }
 
 /* ---------- Game Helper ---------- */
@@ -2558,36 +1991,31 @@ pII hard_level(char board[][BOARD_N_MAX],
  * ============================================================
  */
 template <typename Function>
-auto measureExecutionTime(const std::string &label, Function func, bool enabled)
-    -> std::invoke_result_t<Function>
-{
+auto measureExecutionTime(const std::string& label, Function func, bool enabled)
+    -> std::invoke_result_t<Function> {
     // Get Return Type
     using ReturnT = std::invoke_result_t<Function>;
 
     // Exercute func() and Meansure Runtime
     auto start = std::chrono::high_resolution_clock::now();
 
-    if constexpr (std::is_void_v<ReturnT>)
-    {
+    if constexpr (std::is_void_v<ReturnT>) {
         func();
         auto end = std::chrono::high_resolution_clock::now();
 
-        if (enabled)
-        {
+        if (enabled) {
             std::chrono::duration<double> duration = end - start;
             std::stringstream msg;
             msg << "execution time of " << "[" << label << "()]" << " = " << duration.count() << "s";
             GameLogger::log(msg.str(), GameLogger::Level::DEBUG);
         }
         return;
-    }
-    else
-    {
+
+    } else {
         ReturnT result = func();
         auto end = std::chrono::high_resolution_clock::now();
 
-        if (enabled)
-        {
+        if (enabled) {
             std::chrono::duration<double> duration = end - start;
             std::stringstream msg;
             msg << "execution time of " << "[" << label << "()]" << " = " << duration.count() << "s";
@@ -2633,14 +2061,13 @@ auto measureExecutionTime(const std::string &label, Function func, bool enabled)
  *
  * ============================================================
  */
-int main(int argc, char *argv[])
-{
+int main(int argc, char* argv[]) {
     RunConfig config = parseArgs(argc, argv);
 
     GameLogger::init(config.judge_mode, true, config.log_file);
     GameLogger::log("GameLogger initialized!");
 
-    std::streambuf *cin_backup = initInteraction(config);
+    std::streambuf* cin_backup = initInteraction(config);
     GameLogger::log("GameInteraction initialized!");
 
     GameSetup gameSetup;
