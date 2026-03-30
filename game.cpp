@@ -429,7 +429,7 @@ struct GameSetup
     int size;
     int goal;
     GameMode mode;
-    EndRule rule;
+    EndRule rule = EndRule::OPEN_TWO;
     BotLevel levels[2];
 };
 
@@ -1596,16 +1596,16 @@ void startGame(const RunConfig &config, GameSetup &gameSetup)
         }
     }
 
-    if (config.interactive)
-        showSelectMenu(SelectType::END_RULE_UI);
+    // if (config.interactive)
+    //     showSelectMenu(SelectType::END_RULE_UI);
 
-    while (!selectEndRule(&gameSetup.rule))
-    {
-        if (config.interactive)
-        {
-            std::cout << "Invalid end-rule. Please try again.\n";
-        }
-    }
+    // while (!selectEndRule(&gameSetup.rule))
+    // {
+    //     if (config.interactive)
+    //     {
+    //         std::cout << "Invalid end-rule. Please try again.\n";
+    //     }
+    // }
 
     if (config.interactive)
         showSelectMenu(SelectType::GAME_MODE_UI);
