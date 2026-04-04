@@ -1,12 +1,14 @@
 Tic-tac-toe Game (Version: 0.4.25022877)
 ------------------------------------------------
-[INFO] - [2026-03-30 11:45:10] GameLogger initialized!
-[INFO] - [2026-03-30 11:45:10] redirected cin to: C:\Users\dongh\Documents\UET\PPLLT\BaiTapLon\level-1\testcase\input5.txt
-[INFO] - [2026-03-30 11:45:10] GameInteraction initialized!
-[INFO] - [2026-03-30 11:45:10] GameEngine initialized!
-[INFO] - [2026-03-30 11:45:10] GameEngine playing done!
-[INFO] - [2026-03-30 11:45:10] Game ended: winner=1, turns=11, isBot=false
-[INFO] - [2026-03-30 11:45:10] GameEngine show endgame done!
-[INFO] - [2026-03-30 11:45:10] fallback using 'std::cin' input stream.
-[INFO] - [2026-03-30 11:45:10] GameInteraction closed!
-[INFO] - [2026-03-30 11:45:10] GameLogger closing . . .
+[INFO] - [2026-04-04 12:50:14] GameLogger initialized!
+[INFO] - [2026-04-04 12:50:14] GameInteraction initialized!
+[INFO] - [2026-04-04 12:50:18] GameEngine initialized!
+[DEBUG] - [2026-04-04 12:50:20] execution time of [botMove()] = 0.0001538s
+[DEBUG] - [2026-04-04 12:50:22] execution time of [botMove()] = 4.89e-05s
+[DEBUG] - [2026-04-04 12:50:25] execution time of [botMove()] = 1.93e-05s
+[DEBUG] - [2026-04-04 12:50:38] execution time of [botMove()] = 6e-06s
+[INFO] - [2026-04-04 12:50:38] GameEngine playing done!
+[INFO] - [2026-04-04 12:50:38] Game ended: winner=2, turns=8, isBot=true
+[INFO] - [2026-04-04 12:50:38] GameEngine show endgame done!
+[INFO] - [2026-04-04 12:50:38] GameInteraction closed!
+[INFO] - [2026-04-04 12:50:38] GameLogger closing . . .

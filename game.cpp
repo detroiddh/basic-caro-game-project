@@ -729,7 +729,7 @@ void initBoard(char board[][BOARD_N_MAX], const int size);
 bool isValidMove(const char board[][BOARD_N_MAX], const int size, const int row, const int col);
 void makeMove(char board[][BOARD_N_MAX], const int row, const int col, const char symbol);
 bool isEmptyHead(char board[][BOARD_N_MAX], int size, int x, int y, const char symbol);
-bool checkWin(char board[][BOARD_N_MAX], const int size, const char symbol, const int goal, EndRule rule = EndRule::OPEN_TWO);
+bool checkWin(char board[][BOARD_N_MAX], const int size, int i, int j, const char symbol, const int goal, EndRule rule = EndRule::OPEN_TWO);
 bool checkDraw(char board[][BOARD_N_MAX], const int size);
 
 // Bot Move Logic
@@ -1825,7 +1825,7 @@ GameResult playGame(const RunConfig &config, GameSetup &gameSetup)
 
         turns++;
 
-        if (checkWin(gameSetup.board, gameSetup.size, symbols[currentPlayer], gameSetup.goal, gameSetup.rule))
+        if (checkWin(gameSetup.board, gameSetup.size, row, col, symbols[currentPlayer], gameSetup.goal, gameSetup.rule))
         {
             result.winner = currentPlayer + 1;
             result.turns = turns;
@@ -1994,56 +1994,61 @@ bool isEmptyHead(char board[][BOARD_N_MAX], int size, int x, int y, const char s
  *   true  -> player wins
  *   false -> no win detected
  */
-bool checkWin(char board[][BOARD_N_MAX], const int size, const char symbol, const int goal, EndRule rule)
+bool checkWin(char board[][BOARD_N_MAX], const int size, int i, int j, const char symbol, const int goal, EndRule rule)
 {
     const int directions[4][2] = {{0, 1}, {1, 0}, {1, 1}, {1, -1}};
 
-    for (int i = 0; i < size; ++i)
+    for (int d = 0; d < 4; ++d)
     {
-        for (int j = 0; j < size; ++j)
+        int dx = directions[d][0];
+        int dy = directions[d][1];
+        int count = 1, le = 1, ri = 1;
+
+        for (int k = 1; k < goal; ++k)
         {
-            if (board[i][j] != symbol)
+            int nx = i + dx * k;
+            int ny = j + dy * k;
+            if (nx < 0 || nx >= size || ny < 0 || ny >= size || board[nx][ny] != symbol)
             {
-                continue;
+                break;
             }
+            count++;
+            ri++;
+        }
 
-            for (int d = 0; d < 4; ++d)
+        for (int k = 1; k < goal; ++k)
+        {
+            int nx = i - dx * k;
+            int ny = j - dy * k;
+            if (nx < 0 || nx >= size || ny < 0 || ny >= size || board[nx][ny] != symbol)
             {
-                int dx = directions[d][0];
-                int dy = directions[d][1];
-                int count = 0;
-
-                for (int k = 0; k < goal; ++k)
-                {
-                    int nx = i + dx * k;
-                    int ny = j + dy * k;
-                    if (nx < 0 || nx >= size || ny < 0 || ny >= size || board[nx][ny] != symbol)
-                    {
-                        break;
-                    }
-                    count++;
-                }
-
-                if (count < goal)
-                    continue;
-
-                if (rule == EndRule::NONE)
-                {
-                    return true;
-                }
-
-                bool leftAvailable = isEmptyHead(board, size, i - dx, j - dy, symbol);
-                bool rightAvailable = isEmptyHead(board, size, i + dx * goal, j + dy * goal, symbol);
-
-                if (rule == EndRule::OPEN_ONE && (leftAvailable || rightAvailable))
-                {
-                    return true;
-                }
-                if (rule == EndRule::OPEN_TWO && leftAvailable && rightAvailable)
-                {
-                    return true;
-                }
+                break;
             }
+            count++;
+            le++;
+        }
+
+        if (count < goal)
+            continue;
+
+        if (rule == EndRule::NONE)
+        {
+            return true;
+        }
+
+        int block = 2;
+        if(isEmptyHead(board, size, i - dx * le, j - dy * le, symbol)) block--;
+        if(isEmptyHead(board, size, i + dx * ri, j + dy * ri, symbol)) block--;
+
+        block -= (count - goal);
+
+        if (rule == EndRule::OPEN_ONE && block <= 1)
+        {
+            return true;
+        }
+        if (rule == EndRule::OPEN_TWO && block <= 0)
+        {
+            return true;
         }
     }
 
@@ -2433,18 +2438,19 @@ BMove minimax(char board[][BOARD_N_MAX],
               bool maximizingPlayer,
               double alpha,
               double beta,
-              double score = 0)
+              double score,
+              int x, int y)
 {
 
     if (depth == 0)
     {
         return {-1, -1, score};
     }
-    else if (checkWin(board, size, botSymbol, goal, rule))
+    else if ((x != -1) && (board[x][y] == botSymbol) && (checkWin(board, size, x, y, botSymbol, goal, rule)))
     {
         return {-1, -1, 1000000};
     }
-    else if (checkWin(board, size, playerSymbol, goal, rule))
+    else if ((x != -1) && (board[x][y] == playerSymbol) && (checkWin(board, size, x, y, playerSymbol, goal, rule)))
     {
         return {-1, -1, -1000000};
     }
@@ -2466,7 +2472,19 @@ BMove minimax(char board[][BOARD_N_MAX],
                     board[i][j] = botSymbol;
                     double scorePoint = evaluatePoint(board, size, i, j, botSymbol, goal, rule);
                     board_lim nlim = update(lim, i, j, size);
-                    BMove move = minimax(board, size, nlim, botSymbol, playerSymbol, goal, rule, depth - 1, false, alpha, beta, score + scorePoint);
+                    BMove move = minimax(board, 
+                                         size, 
+                                         nlim, 
+                                         botSymbol, 
+                                         playerSymbol, 
+                                         goal, 
+                                         rule, 
+                                         depth - 1, 
+                                         false, 
+                                         alpha, 
+                                         beta, 
+                                         score + scorePoint, 
+                                         i, j);
                     board[i][j] = '-';
                     move.x = i;
                     move.y = j;
@@ -2476,14 +2494,26 @@ BMove minimax(char board[][BOARD_N_MAX],
                     }
                     alpha = std::max(alpha, bestMove.score);
                     if (beta <= alpha)
-                        break;
+                        goto done;
                 }
                 else
                 {
                     board[i][j] = playerSymbol;
                     double scorePoint = evaluatePoint(board, size, i, j, playerSymbol, goal, rule);
                     board_lim nlim = update(lim, i, j, size);
-                    BMove move = minimax(board, size, nlim, botSymbol, playerSymbol, goal, rule, depth - 1, true, alpha, beta, score - scorePoint);
+                    BMove move = minimax(board, 
+                                         size, 
+                                         nlim, 
+                                         botSymbol, 
+                                         playerSymbol, 
+                                         goal, 
+                                         rule, 
+                                         depth - 1, 
+                                         true, 
+                                         alpha, 
+                                         beta, 
+                                         score - scorePoint, 
+                                         i, j);
                     board[i][j] = '-';
                     move.x = i;
                     move.y = j;
@@ -2493,12 +2523,13 @@ BMove minimax(char board[][BOARD_N_MAX],
                     }
                     beta = std::min(beta, bestMove.score);
                     if (beta <= alpha)
-                        break;
+                        goto done;
                 }
             }
         }
     }
 
+    done:;
     return bestMove;
 }
 
@@ -2532,7 +2563,20 @@ pII hard_level(char board[][BOARD_N_MAX],
     {
         return std::make_pair(size / 2, size / 2);
     }
-    BMove bestMove = minimax(board, size, lim, botSymbol, playerSymbol, goal, rule, 4, true, -1e9, 1e9, 0);
+    BMove bestMove = minimax(board, 
+                             size, 
+                             lim, 
+                             botSymbol, 
+                             playerSymbol, 
+                             goal, 
+                             rule, 
+                             4, 
+                             true, 
+                             -1e9, 
+                             1e9, 
+                             0, 
+                             -1, -1);
+
     return {bestMove.x, bestMove.y};
 }
 
